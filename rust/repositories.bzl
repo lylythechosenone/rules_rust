@@ -446,6 +446,18 @@ def _rust_toolchain_tools_repository_impl(ctx):
         )
         sha256s.update(rustc_dev_sha256)
 
+    sha256s.update(load_rust_src(
+        ctx = ctx,
+        iso_date = iso_date,
+        version = version,
+    ))
+
+    build_components.append("""\
+alias(
+    name = "rust_src",
+    actual = "//lib/rustlib/src:rustc_srcs",
+)""")
+
     ctx.file("WORKSPACE.bazel", "")
     ctx.file("BUILD.bazel", "\n".join(build_components))
 
